@@ -12,6 +12,7 @@
   "dependencies": {
     "amqplib": "^0.5.2",
     "axios": "^0.18.0",
-    "body-parser": "^1.18.2"
+    "body-parser": "^1.18.2",
+    "nodemailer": "^4.6.3"
   }
 }
