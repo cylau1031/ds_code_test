@@ -1,29 +1,33 @@
-function start(amqp) {
+'use strict';
+
+const amqp = require('amqplib');
+
+function start() {
   return amqp.connect(process.env.CLOUDAMQP_URL)
     .then(conn => {
       conn.on('error', err => {
         if (err.message !== 'Connection closing') {
-          console.error('[AMQP] conn error', err.message);
+          console.error('AMQP connection error', err.message);
         }
       });
       conn.on('close', () => {
-        console.error('[AMQP] reconnecting');
+        console.error('AMQP reconnecting');
         return setTimeout(start, 1000);
       });
-      console.log('[AMQP] connected');
+      console.log('AMQP connected');
       return conn;
     })
     .catch(err => {
-      console.error('[AMQP]', err.message);
+      console.error('AMQP', err.message);
       return setTimeout(start, 1000);
     })
 }
 
-function startChannel(conn) {
+function startPublisher(conn) {
   return conn.createChannel()
     .then(channel => {
       channel.on('error', err => {
-        console.log('[AMQP] channel error', err.message);
+        console.log('AMQP channel error', err.message);
       })
       channel.on('close', () => console.log('channel closed'))
       channel.assertExchange('emails', 'direct');
@@ -34,5 +38,5 @@ function startChannel(conn) {
 
 module.exports = {
   start,
-  startChannel
+  startPublisher
 }

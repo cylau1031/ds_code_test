@@ -1,11 +1,11 @@
 {
-  "name": "dosomething_code_test",
+  "name": "ds_code_test",
   "version": "1.0.0",
   "description": "",
   "main": "./server/app.js",
   "scripts": {
-    "start": "nodemon ./server/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./server/app.js",
+    "start-dev": "NODE_ENV=development nodemon ./server/app.js"
   },
   "author": "",
   "license": "ISC",
