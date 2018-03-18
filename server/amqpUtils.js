@@ -20,6 +20,19 @@ function start(amqp) {
     })
 }
 
+function startChannel(conn) {
+  return conn.createChannel()
+    .then(channel => {
+      channel.on('error', err => {
+        console.log('[AMQP] channel error', err.message);
+      })
+      channel.on('close', () => console.log('channel closed'))
+      return channel;
+    })
+    .catch(err => console.log(err))
+}
+
 module.exports = {
-  start
+  start,
+  startChannel
 }
