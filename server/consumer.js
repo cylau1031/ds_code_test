@@ -3,39 +3,31 @@
 const nodemailer = require('nodemailer');
 
 function sendEmail(data, channel) {
-  nodemailer.createTestAccount((err, account) => {
-    if (err) return err;
-    let transporter = nodemailer.createTransport({
-      host: 'smtp.ethereal.email',
-      port: 587,
-      secure: false,
-      auth: {
-          user: account.user,
-          pass: account.pass
-      }
-    })
-    let message = JSON.parse(data.content.toString());
-    let emailText = Object.keys(message).reduce((acc, cur, ind) => {
-      return `${acc}\n${cur}: ${message[cur]}`;
-    }, '')
-    let emailHTML = emailText.replace(/\n/g, '<br />');
-    let mailOptions = {
-      from: 'Jamie <test@test.com>',
-      to: 'test@test.com',
-      subject: 'Email testing',
-      text: `${emailText}`,
-      html: `<div>${emailHTML}</div>`
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          return console.log(error);
-      }
-      // Preview email with Ethereal email with link below
-      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      channel.ack(data);
-    })
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    auth: {
+        user: process.env.EMAILUSER,
+        pass: process.env.EMAILPASS
+    }
+  });
+  let message = JSON.parse(data.content.toString());
+  let emailText = Object.keys(message).reduce((acc, cur) => {
+    return `${acc}\n${cur}: ${message[cur]}`;
+  }, '')
+  let emailHTML = emailText.replace(/\n/g, '<br />');
+  let mailOptions = {
+    from: 'Jamie <jlau.test123@gmail.com>',
+    to: 'cylau1031@gmail.com',
+    subject: 'Email testing',
+    text: `FORM SUBMISSION\n${emailText}`,
+    html: `<div><h1>FORM SUBMISSION</h1><br />${emailHTML}</div>`
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+        return console.log(error);
+    }
+  channel.ack(data);
   })
-
 }
 
 function startConsumer(conn) {
