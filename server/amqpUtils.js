@@ -2,6 +2,7 @@
 
 const amqp = require('amqplib');
 
+// start the amqp connection to CloudAMQP instance. Tries to reconnect when errors occur.
 function start() {
   return amqp.connect(process.env.CLOUDAMQP_URL)
     .then(conn => {
@@ -23,6 +24,7 @@ function start() {
     })
 }
 
+// starts publisher which is setting up channel and exchange
 function startPublisher(conn) {
   return conn.createChannel()
     .then(channel => {

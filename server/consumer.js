@@ -1,7 +1,7 @@
 'use strict';
 
 const nodemailer = require('nodemailer');
-
+//sendEmail uses nodemailer to send email to preset address with submitted form data
 function sendEmail(data, channel) {
   let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -18,7 +18,7 @@ function sendEmail(data, channel) {
   let emailHTML = emailText.replace(/\n/g, '<br />');
   let mailOptions = {
     from: 'Chuen Yan (Jamie) Lau <jlau.test123@gmail.com>',
-    to: 'cylau1031@gmail.com',
+    to: 'dscodetest@mailinator.com',
     subject: 'DS Code Test Email',
     text: `FORM SUBMISSION\n${emailText}`,
     html: `<div><h1>FORM SUBMISSION</h1><br />${emailHTML}</div>`
@@ -32,6 +32,7 @@ function sendEmail(data, channel) {
   })
 }
 
+//starts consumer/worker to pull each submited formData off the queue for processing to send out email
 function startConsumer(conn) {
   return conn.createChannel()
   .then(channel => {
